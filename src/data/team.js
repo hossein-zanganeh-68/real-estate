@@ -1,0 +1,38 @@
+export const team = [
+  {
+    id: 'daniel-morgan',
+    name: 'Daniel Morgan',
+    role: 'Managing Director',
+    bio: 'With over 20 years in luxury real estate, Daniel founded Horizon Properties on the principles of integrity and exceptional service.',
+    image: 'https://images.unsplash.com/photo-1560250097-0219e0a24d1d?auto=format&fit=crop&w=600&q=80',
+    phone: '(555) 246-7890',
+    email: 'daniel@horizonproperties.com',
+  },
+  {
+    id: 'olivia-carter',
+    name: 'Olivia Carter',
+    role: 'Luxury Property Advisor',
+    bio: 'Olivia specializes in waterfront and architectural properties, bringing a designer\'s eye to every transaction.',
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80',
+    phone: '(555) 246-7891',
+    email: 'olivia@horizonproperties.com',
+  },
+  {
+    id: 'james-wilson',
+    name: 'James Wilson',
+    role: 'Investment Consultant',
+    bio: 'James helps clients build and manage profitable real estate portfolios with data-driven market analysis.',
+    image: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=600&q=80',
+    phone: '(555) 246-7892',
+    email: 'james@horizonproperties.com',
+  },
+  {
+    id: 'sophia-bennett',
+    name: 'Sophia Bennett',
+    role: 'Senior Property Specialist',
+    bio: 'Sophia\'s expertise in negotiation and client relations has earned her recognition as a top performer year after year.',
+    image: 'https://images.unsplash.com/photo-1580489944761-15a48d04c9d9?auto=format&fit=crop&w=600&q=80',
+    phone: '(555) 246-7893',
+    email: 'sophia@horizonproperties.com',
+  },
+]
