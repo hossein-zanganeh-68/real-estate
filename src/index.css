@@ -384,6 +384,376 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 
 /* ============================================================
+   HERO — 3D (CSS-3D, no WebGL)
+   ============================================================ */
+.hero-3d {
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  padding: 72px 0 60px;
+}
+.hero-3d-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse at 70% 40%, rgba(197, 160, 89, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 60%, rgba(26, 58, 92, 0.4) 0%, transparent 50%),
+    linear-gradient(160deg, #0A1420 0%, #102A43 50%, #0A1420 100%);
+}
+.hero-3d-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image:
+    linear-gradient(rgba(197, 160, 89, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(197, 160, 89, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+.hero-3d-glow {
+  position: absolute;
+  bottom: 10%;
+  right: 15%;
+  width: 500px;
+  height: 500px;
+  z-index: 1;
+  background: radial-gradient(circle, rgba(197, 160, 89, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-3d-content {
+  position: relative;
+  z-index: 2;
+  text-align: left;
+  max-width: 520px;
+  padding: 0 var(--gutter);
+  margin-left: max(40px, calc((100% - var(--container)) / 2));
+  flex-shrink: 0;
+}
+.hero-3d-canvas-wrap {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  height: 560px;
+  margin-right: max(20px, calc((100% - var(--container)) / 2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-3d-hint {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(197, 160, 89, 0.7);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 8px 18px;
+  border-radius: 100px;
+  background: rgba(10, 20, 32, 0.5);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(197, 160, 89, 0.2);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.hero-3d-hint::before {
+  content: '';
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid rgba(197, 160, 89, 0.5);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* ============================================================
+   CSS 3D HOUSE MODEL
+   ============================================================ */
+.css3d-scene {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.css3d-perspective {
+  width: 400px;
+  height: 360px;
+  perspective: 900px;
+  position: relative;
+}
+.css3d-house {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-style: preserve-3d;
+  transition: transform 0.05s linear;
+}
+.css3d-face {
+  position: absolute;
+  transform-style: preserve-3d;
+}
+
+/* Box faces — generic positioning applied per-box via nth-child overrides.
+   Each box uses these helper classes and overrides size/position. */
+.css3d-box {
+  position: absolute;
+  transform-style: preserve-3d;
+}
+.css3d-face-front  { transform: translateZ(var(--depth, 60px)); }
+.css3d-face-back   { transform: rotateY(180deg) translateZ(var(--depth, 60px)); }
+.css3d-face-left   { transform: rotateY(-90deg) translateZ(var(--depth, 60px)); }
+.css3d-face-right  { transform: rotateY(90deg) translateZ(var(--depth, 60px)); }
+.css3d-face-top    { transform: rotateX(90deg) translateZ(var(--depth, 60px)); }
+.css3d-face-bottom { transform: rotateX(-90deg) translateZ(var(--depth, 60px)); }
+
+/* Materials */
+.css3d-wall        { background: linear-gradient(180deg, #F9F7F2, #e8e4da); }
+.css3d-wall-dark   { background: linear-gradient(180deg, #d8d4ca, #c8c4ba); }
+.css3d-wall-glass  { background: linear-gradient(180deg, rgba(197,160,89,0.6), rgba(197,160,89,0.35)); border: 1px solid rgba(197,160,89,0.5); }
+.css3d-wall-glass-upper { background: linear-gradient(180deg, rgba(197,160,89,0.5), rgba(197,160,89,0.25)); border: 1px solid rgba(197,160,89,0.4); }
+.css3d-dark        { background: #102A43; }
+.css3d-navy        { background: #0A1420; }
+.css3d-navy-light  { background: #1A3A5C; }
+.css3d-roof-slab   { background: #1A3A5C; }
+.css3d-gold        { background: linear-gradient(180deg, #D4B872, #C5A059); }
+.css3d-ground      { background: linear-gradient(180deg, #2a3a4a, #1e2a3a); }
+.css3d-pool-water  { background: linear-gradient(135deg, #1A6B8C, #2A8BB0); }
+.css3d-pool-side   { background: #3a3a3a; }
+.css3d-deck        { background: #3a3a3a; }
+.css3d-deck-top    { background: linear-gradient(135deg, #4a4a4a, #3a3a3a); }
+
+/* Main building — ground floor */
+.css3d-box-main {
+  width: 160px; height: 70px;
+  top: 0; left: -80px;
+  margin-top: 0;
+}
+.css3d-box-main .css3d-face {
+  width: 160px; height: 70px;
+  --depth: 55px;
+}
+.css3d-box-main .css3d-face-left,
+.css3d-box-main .css3d-face-right {
+  width: 110px; height: 70px;
+  --depth: 55px;
+}
+.css3d-box-main .css3d-face-top,
+.css3d-box-main .css3d-face-bottom {
+  width: 160px; height: 110px;
+  --depth: 35px;
+}
+
+/* Upper floor */
+.css3d-box-upper {
+  width: 140px; height: 65px;
+  top: -72px; left: -72px;
+}
+.css3d-box-upper .css3d-face {
+  width: 140px; height: 65px;
+  --depth: 50px;
+}
+.css3d-box-upper .css3d-face-left,
+.css3d-box-upper .css3d-face-right {
+  width: 100px; height: 65px;
+  --depth: 50px;
+}
+.css3d-box-upper .css3d-face-top,
+.css3d-box-upper .css3d-face-bottom {
+  width: 140px; height: 100px;
+  --depth: 32px;
+}
+
+/* Roof overhang */
+.css3d-box-overhang {
+  width: 176px; height: 6px;
+  top: -3px; left: -88px;
+}
+.css3d-box-overhang .css3d-face {
+  width: 176px; height: 6px;
+  --depth: 60px;
+}
+.css3d-box-overhang .css3d-face-left,
+.css3d-box-overhang .css3d-face-right {
+  width: 120px; height: 6px;
+  --depth: 60px;
+}
+.css3d-box-overhang .css3d-face-top,
+.css3d-box-overhang .css3d-face-bottom {
+  width: 176px; height: 120px;
+  --depth: 3px;
+}
+
+/* Flat roof on top */
+.css3d-box-roof {
+  width: 146px; height: 5px;
+  top: -138px; left: -73px;
+}
+.css3d-box-roof .css3d-face {
+  width: 146px; height: 5px;
+  --depth: 55px;
+}
+.css3d-box-roof .css3d-face-left,
+.css3d-box-roof .css3d-face-right {
+  width: 110px; height: 5px;
+  --depth: 55px;
+}
+.css3d-box-roof .css3d-face-top,
+.css3d-box-roof .css3d-face-bottom {
+  width: 146px; height: 110px;
+  --depth: 3px;
+}
+
+/* Gold pillar */
+.css3d-box-pillar {
+  width: 6px; height: 100px;
+  top: -30px; left: 77px;
+}
+.css3d-box-pillar .css3d-face {
+  width: 6px; height: 100px;
+  --depth: 4px;
+}
+.css3d-box-pillar .css3d-face-left,
+.css3d-box-pillar .css3d-face-right {
+  width: 8px; height: 100px;
+  --depth: 4px;
+}
+.css3d-box-pillar .css3d-face-top,
+.css3d-box-pillar .css3d-face-bottom {
+  width: 6px; height: 8px;
+  --depth: 4px;
+}
+
+/* Pool */
+.css3d-box-pool {
+  width: 130px; height: 4px;
+  top: 35px; left: -180px;
+}
+.css3d-box-pool .css3d-face {
+  width: 130px; height: 4px;
+  --depth: 45px;
+}
+.css3d-box-pool .css3d-face-left,
+.css3d-box-pool .css3d-face-right {
+  width: 90px; height: 4px;
+  --depth: 45px;
+}
+.css3d-box-pool .css3d-face-top,
+.css3d-box-pool .css3d-face-bottom {
+  width: 130px; height: 90px;
+  --depth: 2px;
+}
+
+/* Pool deck */
+.css3d-box-deck {
+  width: 170px; height: 3px;
+  top: 36px; left: -200px;
+}
+.css3d-box-deck .css3d-face {
+  width: 170px; height: 3px;
+  --depth: 60px;
+}
+.css3d-box-deck .css3d-face-left,
+.css3d-box-deck .css3d-face-right {
+  width: 120px; height: 3px;
+  --depth: 60px;
+}
+.css3d-box-deck .css3d-face-top,
+.css3d-box-deck .css3d-face-bottom {
+  width: 170px; height: 120px;
+  --depth: 2px;
+}
+
+/* Ground plane */
+.css3d-ground {
+  width: 400px; height: 400px;
+  top: 38px; left: -200px;
+  transform: rotateX(90deg) translateZ(-30px);
+  background: radial-gradient(ellipse at center, #2a3a4a 0%, #1a2030 70%, transparent 100%);
+  opacity: 0.6;
+}
+
+/* Trees */
+.css3d-tree {
+  position: absolute;
+  transform-style: preserve-3d;
+}
+.css3d-tree-trunk {
+  width: 8px; height: 20px;
+  background: #5a4a3a;
+  border-radius: 2px;
+  position: absolute;
+}
+.css3d-tree-top {
+  width: 0; height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 36px solid #3a6a4a;
+  position: absolute;
+  top: -28px;
+  left: -16px;
+}
+.css3d-tree-1 { top: 15px; left: 130px; }
+.css3d-tree-2 { top: 25px; left: -140px; }
+.css3d-tree-3 { top: 20px; left: 140px; transform: translateZ(-50px) scale(0.85); }
+
+/* Hedges */
+.css3d-hedge {
+  position: absolute;
+  width: 28px; height: 16px;
+  background: #2a5a3a;
+  border-radius: 4px;
+  top: 48px;
+}
+.css3d-hedge-1 { left: -70px; }
+.css3d-hedge-2 { left: -38px; }
+.css3d-hedge-3 { left: -6px; }
+.css3d-hedge-4 { left: 26px; }
+
+/* ============================================================
+   PROPERTY 3D VIEWER
+   ============================================================ */
+.property-3d-viewer {
+  margin-bottom: 48px;
+}
+.property-3d-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.property-3d-header h3 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+.property-3d-header p {
+  font-size: 0.8125rem;
+  color: var(--gray-text);
+  margin: 0;
+}
+.property-3d-canvas {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: linear-gradient(160deg, #0A1420 0%, #102A43 100%);
+}
+.property-3d-canvas .css3d-perspective {
+  margin: 0 auto;
+  transform: scale(1.05);
+}
+
+/* ============================================================
    ABOUT / WHO WE ARE
    ============================================================ */
 .about-grid {
@@ -1223,6 +1593,23 @@ main { min-height: 60vh; }
   .container { padding: 0 20px; }
 
   .hero { min-height: 90vh; }
+  .hero-3d {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: 100px 0 60px;
+  }
+  .hero-3d-content {
+    text-align: center;
+    margin: 0 auto;
+    max-width: 600px;
+  }
+  .hero-3d-canvas-wrap {
+    width: 100%;
+    height: 380px;
+    margin: 0 auto;
+    max-width: 600px;
+  }
   .hero-content { margin-top: 0; }
   .hero-actions { flex-direction: column; align-items: center; }
   .hero-actions .btn { width: 100%; max-width: 280px; justify-content: center; }
@@ -1253,6 +1640,8 @@ main { min-height: 60vh; }
   .pdp-stat:nth-child(2) { border-right: none; }
   .pdp-stat:nth-child(1), .pdp-stat:nth-child(2) { border-bottom: 1px solid var(--border); }
   .pdp-features-list, .pdp-amenities-list { grid-template-columns: 1fr; }
+
+  .property-3d-canvas { height: 320px; }
 
   .pdp-mobile-cta { display: flex; }
   .pdp { padding-bottom: 100px; }

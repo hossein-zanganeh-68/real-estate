@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { getPropertyById, getSimilarProperties } from '../data/properties.js'
 import { useFavorites } from '../components/FavoritesContext.jsx'
 import PropertyCard from '../components/PropertyCard.jsx'
+import Property3DViewer from '../components/Property3DViewer.jsx'
 import {
   MapPin, Bed, Bath, Ruler, Check, Heart, ArrowLeft, ArrowRight,
   Expand, X, Phone, Mail, Home
@@ -91,6 +92,9 @@ export default function PropertyDetail() {
               ))}
             </div>
           </div>
+
+          {/* 3D Interactive Viewer */}
+          <Property3DViewer />
 
           {/* Layout */}
           <div className="pdp-layout">

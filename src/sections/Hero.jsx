@@ -1,20 +1,17 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from '../components/Icons.jsx'
+import House3DModel from '../components/House3DModel.jsx'
 
 const ease = [0.16, 1, 0.3, 1]
 
 export default function Hero() {
   return (
-    <section className="hero">
-      <div className="hero-bg">
-        <img
-          src="https://images.unsplash.com/photo-1600596542815-52ad1878e1d0?auto=format&fit=crop&w=1920&q=80"
-          alt="Modern luxury villa with infinity pool at dusk"
-        />
-      </div>
-      <div className="hero-overlay" />
-      <div className="hero-content">
+    <section className="hero hero-3d">
+      <div className="hero-3d-bg" />
+      <div className="hero-3d-grid" />
+      <div className="hero-3d-glow" />
+      <div className="hero-content hero-3d-content">
         <motion.p
           className="hero-label"
           initial={{ opacity: 0, y: 20 }}
@@ -31,7 +28,7 @@ export default function Hero() {
         >
           Discover Exceptional
           <br />
-          Homes &amp; Investments
+          Homes & Investments
         </motion.h1>
         <motion.p
           className="hero-subtitle"
@@ -54,6 +51,12 @@ export default function Hero() {
             Contact Us
           </Link>
         </motion.div>
+      </div>
+      <div className="hero-3d-canvas-wrap">
+        <House3DModel />
+        <div className="hero-3d-hint">
+          <span>Drag to explore</span>
+        </div>
       </div>
       <motion.div
         className="hero-scroll"
