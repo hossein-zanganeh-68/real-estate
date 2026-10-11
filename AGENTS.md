@@ -1,13 +1,28 @@
 # Base44 Setup Notes
 
 ## Project
-Single static `index.html` page (Real Estate). No backend, no dependencies, no build step.
+Horizon Properties — a premium real estate website built with Vite + React + React Router.
+Multi-page app: Home, Properties (with filtering/search), Property Detail (with gallery), About, Services, Team, Contact.
+
+## Stack
+- Vite 6.x dev server on port 5173 (mapped to host 3000)
+- React 18, React Router DOM 6
+- CSS: three files (index.css, styles/components.css, styles/pages.css) using CSS custom properties
+- Images: downloaded from Unsplash and served locally from `public/images/`
 
 ## Running
-Served by `python:3.12-slim` running `http.server` on port 80 (mapped to host 3000) via `docker-compose.base44.yml`. The repo directory is bind-mounted read-only at `/app`.
+`docker compose -f docker-compose.base44.yml up -d` starts a `node:22-slim` container that runs `npm install && vite --host 0.0.0.0`. Source is bind-mounted at `/app`; Vite live-reloads on edits.
 
-## Why not nginx
-The sandbox root directory has restrictive permissions (700) that nginx's non-root worker process cannot traverse, causing 403 Forbidden. Python's `http.server` runs as root and reads the files without issue.
+## Architecture
+- `src/data/` — properties, services, team, and site content as JS modules
+- `src/components/` — reusable: Header, Footer, PropertyCard, PropertyCarousel, ImageGallery, CTASection, ScrollReveal, Icons
+- `src/pages/` — route pages (Home, Properties, PropertyDetail, About, Services, Team, Contact)
+- `src/styles/` — component and page CSS
 
 ## No secrets required
 This project has no external service dependencies.
+
+## Notes
+- The sandbox host directory has restrictive permissions (700); the Vite dev server (Node) handles this fine.
+- Vite `allowedHosts: true` is set when `BASE44_PREVIEW_MODE === "1"` for preview proxy compatibility.
+- Images are served from `/public/images/` so they load reliably in the preview iframe.
