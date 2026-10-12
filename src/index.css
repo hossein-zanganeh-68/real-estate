@@ -1,0 +1,198 @@
+/* ===== RESET ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiase; }
+img { display: block; max-width: 100%; }
+button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+
+/* ===== DESIGN TOKENS ===== */
+:root {
+  /* Colors */
+  --navy: #0A1D36;
+  --navy-light: #142540;
+  --navy-dark: #061425;
+  --gold: #C5A072;
+  --gold-light: #D4B88E;
+  --gold-dark: #A8855A;
+  --white: #FFFFFF;
+  --cream: #F7F5F2;
+  --gray-light: #F0EFEC;
+  --gray: #E5E3DF;
+  --text: #1A1A1A;
+  --text-light: #4A4A4A;
+  --text-muted: #8A8A8A;
+  --cta-bg: #EDF0F4;
+
+  /* Typography */
+  --font-heading: 'Montserrat', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+
+  /* Spacing */
+  --section-py: clamp(4rem, 8vw, 8rem);
+  --container: 1400px;
+  --container-px: clamp(1.5rem, 5vw, 4rem);
+
+  /* Radius */
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+  --r-full: 999px;
+
+  /* Transitions */
+  --t: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --t-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  --t-spring: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Shadows */
+  --sh-sm: 0 2px 10px rgba(10,29,54,.06);
+  --sh-md: 0 10px 30px rgba(10,29,54,.10);
+  --sh-lg: 0 24px 64px rgba(10,29,54,.16);
+}
+
+/* ===== BASE ===== */
+body {
+  font-family: var(--font-body);
+  color: var(--text);
+  background: var(--white);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+}
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding-inline: var(--container-px);
+}
+
+/* ===== TYPOGRAPHY HELPERS ===== */
+.section-label {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.section-title {
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 700;
+}
+
+.section-title.center { text-align: center; }
+
+.section-subtitle {
+  margin-top: 1rem;
+  color: var(--text-light);
+  font-size: 1.05rem;
+  max-width: 600px;
+}
+.section-subtitle.center { margin-inline: auto; text-align: center; }
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 0.8rem 1.75rem;
+  border-radius: var(--r-full);
+  transition: all var(--t);
+  white-space: nowrap;
+}
+
+.btn-navy {
+  background: var(--navy);
+  color: var(--white);
+}
+.btn-navy:hover {
+  background: var(--navy-light);
+  transform: translateY(-1px);
+  box-shadow: var(--sh-md);
+}
+
+.btn-outline {
+  border: 1.5px solid currentColor;
+  color: var(--white);
+  padding: 0.65rem 1.5rem;
+}
+.btn-outline:hover {
+  background: var(--white);
+  color: var(--navy);
+  border-color: var(--white);
+}
+
+.btn-outline-navy {
+  border: 1.5px solid var(--navy);
+  color: var(--navy);
+}
+.btn-outline-navy:hover {
+  background: var(--navy);
+  color: var(--white);
+}
+
+.btn-gold {
+  background: var(--gold);
+  color: var(--navy-dark);
+}
+.btn-gold:hover {
+  background: var(--gold-light);
+}
+
+.btn .arrow {
+  transition: transform var(--t);
+}
+.btn:hover .arrow { transform: translateX(4px); }
+
+/* ===== SCROLL REVEAL ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.4,0,.2,1), transform 0.7s cubic-bezier(0.4,0,.2,1);
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* ===== SECTION SPACING ===== */
+.section { padding-block: var(--section-py); }
+.section-cream { background: var(--cream); }
+.section-gray { background: var(--gray-light); }
+
+/* ===== HERO OVERLAY (shared) ===== */
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(6,20,37,.35) 0%, rgba(6,20,37,.15) 40%, rgba(6,20,37,.45) 100%);
+  z-index: 1;
+}
+
+/* ===== UTILITY ===== */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+::selection { background: var(--gold); color: var(--navy-dark); }
